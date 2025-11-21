@@ -289,20 +289,14 @@ class LolWikiDataHandler:
         
         sale = {}
         sale_price = 0
-        if name in sale:
-            if sale[name]["price"] != 0:
-                sale_price = int(sale[name]["price"])
-        champion = Champion(
-            id=data["id"],
-            key=data["apiname"],
-            name=name,
-            title=data["title"],
-            full_name=data.get("fullname", ""),
-            icon=None,
-            resource=Resource.from_string(data["resource"]),
-            attack_type=AttackType.from_string(data["rangetype"]),
-            adaptive_type=DamageType.from_string(adaptive_type),
-            stats=Stats(
+        if self.process_skins:
+            sale = self._get_sale()
+            if name in sale:
+                if sale[name]["price"] != 0:
+                    sale_price = int(sale[name]["price"])
+        
+        if self.process_stats:
+            stats = Stats(
                 health=Health(
                     flat=data["stats"]["hp_base"],
                     per_level=data["stats"]["hp_lvl"],
